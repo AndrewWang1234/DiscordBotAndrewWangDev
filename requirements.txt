@@ -1,0 +1,8 @@
+discord.py
+nfl_data_py
+pandas
+python-dotenv
+matplotlib
+flask
+numpy
+seaborn
