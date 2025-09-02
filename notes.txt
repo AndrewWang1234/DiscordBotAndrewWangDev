@@ -1,0 +1,124 @@
+avg_completion_pct = playerAverage('Patrick Mahomes', 'rushing_yards')
+print(f"Patrick Mahomes 2024: {avg_completion_pct:.2f}")
+
+
+Passing stats:
+completions, attempts, passing_yards, passing_tds, interceptions, sacks, sack_yards, sack_fumbles, sack_fumbles_lost, passing_air_yards, passing_yards_after_catch, passing_first_downs, passing_epa, passing_2pt_conversions, pacr
+
+Rushing stats:
+carries, rushing_yards, rushing_tds, rushing_fumbles, rushing_fumbles_lost, rushing_first_downs, rushing_epa, rushing_2pt_conversions
+
+Receiving stats:
+receptions, targets, receiving_yards, receiving_tds, receiving_fumbles, receiving_fumbles_lost, receiving_air_yards, receiving_yards_after_catch, receiving_first_downs, receiving_epa, receiving_2pt_conversions, racr, target_share, air_yards_share, wopr
+
+Misc & special teams:
+special_teams_tds
+
+Fantasy points:
+fantasy_points, fantasy_points_ppr
+
+# def normalize_rating(rating, min_rating=-50, max_rating=200):
+#     norm = (rating - min_rating) / (max_rating - min_rating)
+#     return max(0, min(1, norm))  # clamp between 0 and 1
+
+
+
+# def calculate_rb_rating(player_name, pbp, player_team, opponent_team, offensive_line_df, defensive_df):
+#     """
+#     Calculate a running back rating based on key metrics.
+
+#     Parameters:
+#         player_name (str): Full name of player (e.g., "Bijan Robinson")
+#         pbp (DataFrame): Play-by-play dataset
+#         player_team (str): Player's team abbreviation (e.g., "ATL")
+#         opponent_team (str): Opponent team abbreviation (e.g., "KC")
+#         offensive_line_df (DataFrame): Offensive line metrics by team
+#         defensive_df (DataFrame): Defensive stats by team
+
+#     Returns:
+#         float: Running back rating (higher = better)
+#     """
+#     # Convert player_name to abbreviation matching pbp format (e.g. "B.Robinson")
+
+#     # Filter player rushing plays
+#     player_rushes = pbp[(pbp['rusher_player_name'] == abbrevName) & (pbp['posteam'] == player_team)]
+#     total_rush_attempts = len(player_rushes)
+#     total_rush_yards = player_rushes['yards_gained'].sum()
+#     rush_ypc = total_rush_yards / total_rush_attempts if total_rush_attempts > 0 else 0
+
+#     # Rushing touchdowns
+#     rush_tds = player_rushes['touchdown'].sum()
+
+#     # Filter player receiving plays (targets and catches)
+#     player_targets = pbp[(pbp['receiver_player_name'] == abbrevName) & (pbp['posteam'] == player_team)]
+#     receptions = len(player_targets[player_targets['complete_pass'] == 1])
+#     receiving_yards = player_targets[player_targets['complete_pass'] == 1]['yards_gained'].sum()
+#     receiving_tds = player_targets[player_targets['touchdown'] == 1].shape[0]
+
+#     # Red zone usage rate (rush + pass)
+#     red_zone_plays = pbp[(pbp['yardline_100'] <= 20) & (pbp['posteam'] == player_team)]
+#     red_zone_player_plays = red_zone_plays[
+#         (red_zone_plays['rusher_player_name'] == abbrevName) | (red_zone_plays['receiver_player_name'] == abbrevName)
+#     ]
+#     total_team_off_plays = len(pbp[pbp['posteam'] == player_team])
+#     red_zone_usage_rate = len(red_zone_player_plays) / total_team_off_plays if total_team_off_plays > 0 else 0
+
+#     # Offensive line metric for player team (lower is better)
+#     off_line_metric = offensive_line_df.loc[player_team, 'off_line_metric'] if player_team in offensive_line_df.index else 1
+
+#     # Opponent rush defense rank (lower is better)
+#     opp_def_row = defensive_df[defensive_df['team'] == opponent_team]
+#     rush_def_rank = opp_def_row['rush_rank'].values[0] if not opp_def_row.empty else 32
+
+#     max_receiving_yards = 150  # cap max receiving yards to 150 for normalization
+#     max_rush_ypc = 10          # max reasonable yards per carry
+
+#     norm_receiving_yards = min(receiving_yards, max_receiving_yards) / max_receiving_yards
+#     norm_rush_ypc = min(rush_ypc, max_rush_ypc) / max_rush_ypc
+
+
+#     # Compose rating (example weights - tweak as needed)
+#     raw_rating = (
+#         norm_rush_ypc * 4.0 * max_rush_ypc +  # scale back to yardage equivalence
+#         rush_tds * 6.0 +
+#         receptions * 2.0 +
+#         norm_receiving_yards * 1.5 * max_receiving_yards +  # scale back to yards
+#         receiving_tds * 6.0 +
+#         red_zone_usage_rate * 20.0 -
+#         off_line_metric * 10.0 -
+#         rush_def_rank * 1.0
+#     )
+#     print(f"Raw RB Rating for {player_name} vs {opponent_team}: {raw_rating:.2f}")
+
+#     # Normalize rating to 0-1
+#     norm_rating = normalize_rating(raw_rating)
+
+#     # Scale to 0-100 to match bias model expected range
+#     scaled_rating = norm_rating * 100
+#     print(f"Normalized RB Rating for {player_name} vs {opponent_team}: {scaled_rating:.2f}")
+
+#     return scaled_rating
+
+Rush Efficiency (20%):
+    YPC
+
+Rush Touchdowns (15%):
+    Rushing TDS (2 max)
+
+Reception Touchdowns (10%):
+    Receiving Touchdowns (2 max)
+
+Receptions (10%):
+    Receptions (Diminishes after 5)
+
+Receiving Yards (10%):
+    Receiving Yards
+
+Red Zone Usage (10%):
+    Red Zone Usage
+
+Offensive Line Penalty (15%):
+    Hurts rating to have a bad Oline
+
+Defense Penalty (10%):
+    Hurts rating when opponent has a good rush defense
