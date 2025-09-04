@@ -96,7 +96,7 @@ async def predict_over_under_command(ctx, *args):
         await ctx.send(embed=embed)
 
         elapsed = time.time() - start_time
-        await ctx.send(f"⏱️ Command completed in {elapsed:.2f} seconds.")
+        #await ctx.send(f"⏱️ Command completed in {elapsed:.2f} seconds.")
 
     except Exception as e:
         await ctx.send(f"❌ Error: {e}")
@@ -126,7 +126,7 @@ async def predict(ctx, playerName: str, statLine: str, opponentTeam: str, player
             f"Base: {result['base_projection']:.2f}\n"
             f"Adjusted: {result['adjusted_projection']:.2f}"
         )
-        await ctx.send(f"⏱️ Command completed in {elapsed:.2f} seconds.")
+        #await ctx.send(f"⏱️ Command completed in {elapsed:.2f} seconds.")
 
     except ValueError as e:
         await ctx.send(f"❌ Error: {e}")
@@ -176,7 +176,7 @@ async def h2hl10(ctx, *, args):
         await ctx.send(f"📉 Could not generate graph: {e}")
     
     elapsed = time.time() - start_time
-    await ctx.send(f"⏱️ Command completed in {elapsed:.2f} seconds.")
+    #await ctx.send(f"⏱️ Command completed in {elapsed:.2f} seconds.")
 
 
 @bot.command(name="h2h")
@@ -249,7 +249,7 @@ async def vs_team(ctx, *, args):
         await ctx.send(f"📉 Could not generate graph: {e}")
 
     elapsed = time.time() - start_time
-    await ctx.send(f"⏱️ Command completed in {elapsed:.2f} seconds.")
+    #await ctx.send(f"⏱️ Command completed in {elapsed:.2f} seconds.")
 
 
 @bot.command(name="last10")
